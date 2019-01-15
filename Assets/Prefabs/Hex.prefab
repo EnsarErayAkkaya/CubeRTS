@@ -158,3 +158,5 @@ MonoBehaviour:
   cubePrefab: {fileID: 1883804034346534, guid: 4d5870b73e78a4648a432124b98680e5, type: 2}
   x: 0
   z: 0
+  mapXLimit: 9
+  mapZLimit: 9

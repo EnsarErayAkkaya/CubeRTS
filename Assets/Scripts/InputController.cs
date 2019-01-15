@@ -46,7 +46,23 @@ public class InputController : MonoBehaviour {
 						hit.transform.GetComponent<HexController>().Rise();	
 					}
 					selectedHex = hit.transform.gameObject.GetComponent<HexController>();
-
+					if(MainController.Players[0].isMyHex(selectedHex))
+					{
+						claimButton.GetComponentInChildren<Text>().text = "Add Cube";
+						if(selectedHex.isCubePresent)
+						{
+							claimButton.interactable = false;
+						}
+						else
+						{
+							claimButton.interactable = true;
+						}
+					}
+					else
+					{
+						claimButton.GetComponentInChildren<Text>().text = "Claim";
+						claimButton.interactable = true;
+					}
 					claimButton.gameObject.SetActive(true);//Button pop up					
 				}	    
 			}
@@ -83,7 +99,7 @@ public class InputController : MonoBehaviour {
 	}
 	void UpdateUI()
 	{
-		expansionPointText.text = "Expansion Point: " + MainController.Players[0].expansionPoint;//Temp: expansion point updating
+		expansionPointText.text = "Expansion Point: " + (int)(MainController.Players[0].expansionPoint);//Temp: expansion point updating
 		if(selectedHex != null)
 		{
 			costText.text = "Cost: " + selectedHex.GetCost();//Cost TExt Updadting
@@ -94,7 +110,7 @@ public class InputController : MonoBehaviour {
 	{
 		if(selectedHex.GetOwner() < 0)
 		{
-		MainController.Players[0].Claim(selectedHex);
+			MainController.Players[0].Claim(selectedHex);
 		}
 		else if(selectedHex.GetOwner() == MainController.Players[0].Id)
 		{

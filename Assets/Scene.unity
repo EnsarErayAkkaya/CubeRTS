@@ -494,6 +494,8 @@ MonoBehaviour:
   cubePrefab: {fileID: 1883804034346534, guid: 4d5870b73e78a4648a432124b98680e5, type: 2}
   expansionPoint: 0
   HexList: []
+  hexCost: 10
+  cubeCost: 40
 --- !u!4 &1148413205
 Transform:
   m_ObjectHideFlags: 0
@@ -797,7 +799,7 @@ MonoBehaviour:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_DisabledColor: {r: 0.7843138, g: 0.7843138, b: 0.7843138, a: 0.5019608}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:

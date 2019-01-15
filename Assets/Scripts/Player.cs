@@ -8,10 +8,11 @@ public class Player : MonoBehaviour
 	public  int Id;
 	public Color color;
 	public GameObject cubePrefab;
-
 	public float expansionPoint =0;
-
 	public List<HexController> HexList;
+
+	public int hexCost = 10, cubeCost=40; 
+
 	void Awake () 
 	{
 		HexList = new List<HexController>();
@@ -25,9 +26,8 @@ public class Player : MonoBehaviour
 
 	void IncExpansionPoint()
 	{
-		float IncRate = 1f;    //TODO:Update IncRate Calculation with fieldCount etc...
+		float IncRate = 1f;  
 		expansionPoint += IncRate * Time.deltaTime;
-		//expansionPointText.text = "Expansion Point: " + expansionPoint;
 	}
 	void DecExpansionPoint(float amount)
 	{
@@ -58,11 +58,11 @@ public class Player : MonoBehaviour
 			Debug.Log("You already own this hex");
 			return;
 		}
-		if (expansionPoint > 10 && IsOurNeighbour(hex) == true) //And adjacent And in limit
+		if (expansionPoint > hexCost && IsOurNeighbour(hex) == true) //And adjacent And in limit
 		{
+			DecExpansionPoint(hex.GetCost());
 			hex.SetOwner(Id);
 			HexList.Add(hex);
-			DecExpansionPoint(hex.GetCost());
 		}
 		else
 		{
@@ -70,13 +70,22 @@ public class Player : MonoBehaviour
 		}
 
 	}
-	
 	public void AddCube(HexController hex)
 	{
-		if(expansionPoint >= 40)
+		if(expansionPoint >= cubeCost)
 		{
 			hex.AddCube();
+			DecExpansionPoint(cubeCost);
 		}
 		
+	}
+
+	public bool isMyHex(HexController hex)
+	{
+		if(hex.GetOwner() == Id)
+		{
+			return true;
+		}
+		return false;
 	}
 }

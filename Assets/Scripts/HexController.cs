@@ -10,15 +10,15 @@ public class HexController : MonoBehaviour
 	private int cost =10;
 	private int allyHexCount =0;
 	public bool isCubePresent = false;
+	private int extraCubeCost = 30;
 	public GameObject cubePrefab;
 
 	public int x,z;
-
+	public int mapXLimit,mapZLimit;
 	
 	
 	public void SetOwner(int o)
 	{
-		
 		Rise();
 		owner = o;
 		UpdateAllyHexCount();
@@ -53,6 +53,7 @@ public class HexController : MonoBehaviour
 	}
 	public HexController[] GetAdjecent()
 	{
+		#region xatLimit 
 		if(x == 0 && z % 2 ==0)
 		{
 			HexController h1 = GameObject.Find("Hex_"+(x)+"_"+(z+1)).GetComponent<HexController>();
@@ -72,6 +73,48 @@ public class HexController : MonoBehaviour
 			HexController[] a = new HexController[5] {h1,h2,h3,h4,h5};
 			return  a;
 		}
+		else if(x == mapXLimit && z % 2 == 1)
+		{
+			HexController h1 = GameObject.Find("Hex_"+(x)+"_"+(z-1)).GetComponent<HexController>();
+			HexController h2 = GameObject.Find("Hex_"+(x-1)+"_"+z).GetComponent<HexController>();
+			HexController h3 = GameObject.Find("Hex_"+(x)+"_"+(z+1)).GetComponent<HexController>();
+			
+			HexController[] a = new HexController[3] {h1,h2,h3};
+			return  a;
+		}
+		else if(x == mapXLimit && z % 2 == 0)
+		{
+			HexController h1 = GameObject.Find("Hex_"+(x-1)+"_"+(z+1)).GetComponent<HexController>();
+			HexController h2 = GameObject.Find("Hex_"+(x-1)+"_"+z).GetComponent<HexController>();
+			HexController h3 = GameObject.Find("Hex_"+(x-1)+"_"+(z-1)).GetComponent<HexController>();
+			HexController h4 = GameObject.Find("Hex_"+x+"_"+(z+1)).GetComponent<HexController>();
+			HexController h5 = GameObject.Find("Hex_"+x+"_"+(z-1)).GetComponent<HexController>();
+			HexController[] a = new HexController[5] {h1,h2,h3,h4,h5};
+			return  a;
+		}
+		#endregion
+		#region zatLimit
+		if(z == 0)
+		{
+			HexController h1 = GameObject.Find("Hex_"+(x-1)+"_"+(z+1)).GetComponent<HexController>();
+			HexController h2 = GameObject.Find("Hex_"+(x+1)+"_"+z).GetComponent<HexController>();
+			HexController h3 = GameObject.Find("Hex_"+(x-1)+"_"+(z)).GetComponent<HexController>();
+			HexController h4 = GameObject.Find("Hex_"+x+"_"+(z+1)).GetComponent<HexController>();
+			HexController[] a = new HexController[4] {h1,h2,h3,h4};
+			return  a;
+			
+		}
+		if(z == mapZLimit)
+		{
+			HexController h1 = GameObject.Find("Hex_"+(x-1)+"_"+(z)).GetComponent<HexController>();
+			HexController h2 = GameObject.Find("Hex_"+(x+1)+"_"+(z-1)).GetComponent<HexController>();
+			HexController h3 = GameObject.Find("Hex_"+(x+1)+"_"+(z)).GetComponent<HexController>();
+			HexController h4 = GameObject.Find("Hex_"+x+"_"+(z-1)).GetComponent<HexController>();
+			HexController[] a = new HexController[4] {h1,h2,h3,h4};
+			return  a;
+		}
+		#endregion
+		#region atMiddle
 		if(z % 2 == 0)
 		{
 			HexController h1 = GameObject.Find("Hex_"+(x-1)+"_"+(z+1)).GetComponent<HexController>();
@@ -95,7 +138,7 @@ public class HexController : MonoBehaviour
 			HexController[] a = new HexController[6] {h1,h2,h3,h4,h5,h6};
 			return  a;
 		}
-		
+		#endregion
 	}
 	
 	void UpdateAllyHexCount()
@@ -112,7 +155,6 @@ public class HexController : MonoBehaviour
 		}
 		UpdateCost();
 	}
-
 	void IncAllyHexCount()
 	{
 		allyHexCount++;
@@ -124,8 +166,14 @@ public class HexController : MonoBehaviour
 	
 	public void UpdateCost()
 	{
-		///////////////////////////
-		cost = 10 + (10 * allyHexCount);
+		if(isCubePresent)
+		{
+			cost = 10 + (10 * allyHexCount) + extraCubeCost;
+		}
+		else
+		{
+			cost = 10 + (10 * allyHexCount);
+		}
 	}
 	public int GetCost()
 	{
@@ -136,8 +184,7 @@ public class HexController : MonoBehaviour
 	{
 		if(isCubePresent == false)
 		{
-			Vector3 ExtraY = new Vector3 (transform.position.x, 1.639f,
-			transform.position.z);// position of Cube
+			Vector3 ExtraY = new Vector3 (transform.position.x, 1.639f,transform.position.z);// position of Cube
 			isCubePresent = true;
 			GameObject cube =(GameObject)Instantiate(cubePrefab,ExtraY,Quaternion.identity);
 			cube.GetComponent<MeshRenderer> ().material.color = GetComponentInChildren<MeshRenderer> ().material.color;
