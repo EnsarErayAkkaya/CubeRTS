@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class UIController : MonoBehaviour {
-	public Text expansionPointText;
+	//public Text expansionPointText;
 
 	// Use this for initialization
 	void Start () {
@@ -17,7 +17,7 @@ public class UIController : MonoBehaviour {
 	}
 	void UpdateUI()
 	{
-		expansionPointText.text = "Expansion Point: " + MainController.Players[0].expansionPoint;
+		//expansionPointText.text = "Expansion Point: " + MainController.Players[0].expansionPoint;
 
 	}
 }

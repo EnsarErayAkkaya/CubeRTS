@@ -1,12 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class InputController : MonoBehaviour {
 
 	private LayerMask layer ;
 	private HexController selectedHex; 
-
+	public Button claimButton;
+	public Text allyHexText,costText,expansionPointText;
 	public float cameraSpeed=0.1f;
 
 	// Use this for initialization
@@ -18,9 +21,14 @@ public class InputController : MonoBehaviour {
 	void Update () {
 		CameraControl();
 		SelectHex();
+		UpdateUI();
 	}
 	void SelectHex()
 	{
+		if(EventSystem.current.IsPointerOverGameObject())
+		{
+			return;
+		}
 		if (Input.GetMouseButtonDown (0)) {
 			Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);
 			RaycastHit hit;
@@ -30,23 +38,27 @@ public class InputController : MonoBehaviour {
 				{
 					if(hit.transform.gameObject != selectedHex && selectedHex != null)
 					{
-						selectedHex.GetComponent<HexController>().Fall();
-						hit.transform.GetComponent<HexController>().Rise();	
-						selectedHex = hit.transform.gameObject.GetComponent<HexController>();
-						MainController.Players[0].Claim(selectedHex);
+						selectedHex.Fall();
+						hit.transform.GetComponent<HexController>().Rise();		
 					}
 					else if(selectedHex == null && hit.transform.gameObject != selectedHex)
 					{	
 						hit.transform.GetComponent<HexController>().Rise();	
-						selectedHex = hit.transform.gameObject.GetComponent<HexController>();
 					}
+					selectedHex = hit.transform.gameObject.GetComponent<HexController>();
+
+					claimButton.gameObject.SetActive(true);//Button pop up					
 				}	    
 			}
 			else
-				{				
-					selectedHex.GetComponent<HexController>().Fall();
-					selectedHex = null; 
-				}
+			{	
+				if(selectedHex != null)
+				{
+					selectedHex.Fall();
+				}			
+				selectedHex = null; 
+				claimButton.gameObject.SetActive(false);
+			}
 		}
 	}
 
@@ -69,4 +81,26 @@ public class InputController : MonoBehaviour {
 			Camera.main.transform.position += Camera.main.transform.right *-cameraSpeed * Time.deltaTime;
 		}
 	}
+	void UpdateUI()
+	{
+		expansionPointText.text = "Expansion Point: " + MainController.Players[0].expansionPoint;//Temp: expansion point updating
+		if(selectedHex != null)
+		{
+			costText.text = "Cost: " + selectedHex.GetCost();//Cost TExt Updadting
+			allyHexText.text = "Allies: "+selectedHex.GetAllyHexCount();//Ally Hex Count of selected hex
+		}	
+	}
+	public void ClaimButton()
+	{
+		if(selectedHex.GetOwner() < 0)
+		{
+		MainController.Players[0].Claim(selectedHex);
+		}
+		else if(selectedHex.GetOwner() == MainController.Players[0].Id)
+		{
+			MainController.Players[0].AddCube(selectedHex);
+		}
+
+	}
+
 }

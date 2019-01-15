@@ -1,23 +1,27 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor;
 
 public class HexController : MonoBehaviour 
 {
 	private int owner = -1;
 	private bool isRised = false;
+	private int cost =10;
+	private int allyHexCount =0;
+	public bool isCubePresent = false;
+	public GameObject cubePrefab;
 
 	public int x,z;
 
 	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+	
 	public void SetOwner(int o)
 	{
+		
 		Rise();
 		owner = o;
+		UpdateAllyHexCount();
 		SetHexColor ();
 	}
 	void SetHexColor()
@@ -43,7 +47,10 @@ public class HexController : MonoBehaviour
 			isRised = false;
 		}
 	}
-	
+	public int GetOwner()
+	{
+		return owner;
+	}
 	public HexController[] GetAdjecent()
 	{
 		if(x == 0 && z % 2 ==0)
@@ -90,4 +97,56 @@ public class HexController : MonoBehaviour
 		}
 		
 	}
+	
+	void UpdateAllyHexCount()
+	{
+		HexController[] hexs = this.GetAdjecent();
+		foreach (HexController hex in hexs)
+		{
+			if(hex.GetOwner() == owner)
+			{
+				hex.IncAllyHexCount();
+				hex.UpdateCost();
+				allyHexCount++;
+			}
+		}
+		UpdateCost();
+	}
+
+	void IncAllyHexCount()
+	{
+		allyHexCount++;
+	}
+	public int GetAllyHexCount()
+	{
+		return allyHexCount;
+	}
+	
+	public void UpdateCost()
+	{
+		///////////////////////////
+		cost = 10 + (10 * allyHexCount);
+	}
+	public int GetCost()
+	{
+		return cost;
+	}
+
+	public GameObject AddCube()
+	{
+		if(isCubePresent == false)
+		{
+			Vector3 ExtraY = new Vector3 (transform.position.x, 1.639f,
+			transform.position.z);// position of Cube
+			isCubePresent = true;
+			GameObject cube =(GameObject)Instantiate(cubePrefab,ExtraY,Quaternion.identity);
+			cube.GetComponent<MeshRenderer> ().material.color = GetComponentInChildren<MeshRenderer> ().material.color;
+			return cube;
+		}
+		else {
+			return null;
+		}
+	}
+	
+
 }

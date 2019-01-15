@@ -154,3 +154,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80a94503e3f8ff94e86e4eb6afea0b5d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isCubePresent: 0
+  cubePrefab: {fileID: 1883804034346534, guid: 4d5870b73e78a4648a432124b98680e5, type: 2}
+  x: 0
+  z: 0

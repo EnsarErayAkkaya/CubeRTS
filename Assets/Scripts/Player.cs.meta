@@ -5,7 +5,9 @@ licenseType: Free
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - cubePrefab: {fileID: 1883804034346534, guid: 4d5870b73e78a4648a432124b98680e5,
+      type: 2}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

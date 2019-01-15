@@ -1,12 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor;
 
 public class Player : MonoBehaviour 
 {
 	public  int Id;
 	public Color color;
-
+	public GameObject cubePrefab;
 
 	public float expansionPoint =0;
 
@@ -14,9 +15,7 @@ public class Player : MonoBehaviour
 	void Awake () 
 	{
 		HexList = new List<HexController>();
-		color = Random.ColorHSV(0f,1f,1f,1f,0f,1f);
-		this.gameObject.GetComponent<MeshRenderer> ().material.color = color;
-
+		color = Random.ColorHSV(0f,1f,1f,1f,0f,1f);		
 	}
 
 	void Update ()
@@ -44,6 +43,7 @@ public class Player : MonoBehaviour
 			{
 				if(a == hex)
 				{
+					
 					return true;
 				}
 			}
@@ -53,14 +53,30 @@ public class Player : MonoBehaviour
 	
 	public void Claim(HexController hex)
 	{
+		if(hex.GetOwner() ==Id)
+		{
+			Debug.Log("You already own this hex");
+			return;
+		}
 		if (expansionPoint > 10 && IsOurNeighbour(hex) == true) //And adjacent And in limit
 		{
-			hex.GetComponent<HexController>().SetOwner(Id);
+			hex.SetOwner(Id);
 			HexList.Add(hex);
-			DecExpansionPoint(10);
+			DecExpansionPoint(hex.GetCost());
+		}
+		else
+		{
+			Debug.Log("Please select an adjacent hex");
 		}
 
 	}
 	
-
+	public void AddCube(HexController hex)
+	{
+		if(expansionPoint >= 40)
+		{
+			hex.AddCube();
+		}
+		
+	}
 }
