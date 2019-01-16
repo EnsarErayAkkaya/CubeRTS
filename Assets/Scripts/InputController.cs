@@ -11,10 +11,12 @@ public class InputController : MonoBehaviour {
 	public Button claimButton;
 	public Text allyHexText,costText,expansionPointText;
 	public float cameraSpeed=0.1f;
+	Player player;
 
 	// Use this for initialization
 	void Start () {
 		layer = LayerMask.GetMask ("Terrain");
+		player = FindObjectOfType<Player>().GetComponent<Player>();
 	}
 	
 	// Update is called once per frame
@@ -46,7 +48,7 @@ public class InputController : MonoBehaviour {
 						hit.transform.GetComponent<HexController>().Rise();	
 					}
 					selectedHex = hit.transform.gameObject.GetComponent<HexController>();
-					if(MainController.Players[0].isMyHex(selectedHex))
+					if(player.isMyHex(selectedHex))//////////////
 					{
 						claimButton.GetComponentInChildren<Text>().text = "Add Cube";
 						if(selectedHex.isCubePresent)
@@ -99,7 +101,7 @@ public class InputController : MonoBehaviour {
 	}
 	void UpdateUI()
 	{
-		expansionPointText.text = "Expansion Point: " + (int)(MainController.Players[0].expansionPoint);//Temp: expansion point updating
+		expansionPointText.text = "Expansion Point: " + (int)(player.expansionPoint);//Temp: expansion point updating/////////////////
 		if(selectedHex != null)
 		{
 			costText.text = "Cost: " + selectedHex.GetCost();//Cost TExt Updadting
@@ -108,13 +110,14 @@ public class InputController : MonoBehaviour {
 	}
 	public void ClaimButton()
 	{
+		/////////////////////////////////
 		if(selectedHex.GetOwner() < 0)
 		{
-			MainController.Players[0].Claim(selectedHex);
+			player.Claim(selectedHex);
 		}
-		else if(selectedHex.GetOwner() == MainController.Players[0].Id)
+		else if(selectedHex.GetOwner() == player.Id)
 		{
-			MainController.Players[0].AddCube(selectedHex);
+			player.AddCube(selectedHex);
 		}
 
 	}

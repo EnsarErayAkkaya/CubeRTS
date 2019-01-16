@@ -26,7 +26,7 @@ public class HexController : MonoBehaviour
 	}
 	void SetHexColor()
 	{
-		GetComponentInChildren<MeshRenderer> ().material.color = MainController.Players[owner].color;
+		GetComponentInChildren<MeshRenderer> ().material.color = GetPlayerById().color;
 	}
 	public void Rise()
 	{
@@ -194,6 +194,17 @@ public class HexController : MonoBehaviour
 			return null;
 		}
 	}
-	
+	Player GetPlayerById()
+	{
+		Player[] p = FindObjectsOfType<Player>();
+		foreach (Player player in p)
+		{
+			if(player.Id == owner)
+			{
+				return player;
+			}
+		}
+		return null;
+	}
 
 }

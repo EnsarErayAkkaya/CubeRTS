@@ -75,6 +75,7 @@ public class Player : MonoBehaviour
 		if(expansionPoint >= cubeCost)
 		{
 			hex.AddCube();
+			hex.UpdateCost();
 			DecExpansionPoint(cubeCost);
 		}
 		
